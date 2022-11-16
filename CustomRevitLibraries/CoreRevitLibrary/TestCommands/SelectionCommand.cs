@@ -15,10 +15,22 @@ namespace CoreRevitLibrary.TestCommands
             var application = uiApplication.Application;
             var uiDocument = uiApplication.ActiveUIDocument;
             var document = uiDocument.Document;
-            var components = uiDocument.PickElements(e => e is Wall, new LinkDocumentOption(), "Please, select a wall");
+            var selectedWall = uiDocument.GetSelectedElements()[0];
+            var secondLevel = document.GetElementByName<Level>("Level 2");
+            var baseConstraintParameter = selectedWall.get_Parameter(BuiltInParameter.WALL_BASE_CONSTRAINT);
+            using (Transaction transaction = new Transaction(document, "Set new mark"))
+            {
+                TaskDialog.Show("Before", transaction.GetStatus().ToString());
+                transaction.Start();
+                TaskDialog.Show("Inside", transaction.GetStatus().ToString());
+                baseConstraintParameter.Set(secondLevel.Id);
+                transaction.Commit();
+                TaskDialog.Show("After", transaction.GetStatus().ToString());
 
-            var window = new TestWindow(components);
-            window.ShowDialog();
+            }
+
+            //var window = new TestWindow(new List<string>() { level.Name });
+            //window.ShowDialog();
             return Result.Succeeded;
         }
 

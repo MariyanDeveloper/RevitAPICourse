@@ -26,7 +26,6 @@ namespace CoreRevitLibrary.TestCommands
                 baseConstraintParameter.Set(secondLevel.Id);
                 transaction.Commit();
                 TaskDialog.Show("After", transaction.GetStatus().ToString());
-
             }
 
             //var window = new TestWindow(new List<string>() { level.Name });

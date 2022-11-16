@@ -1,0 +1,38 @@
+Working with Parameters Chapter:
+
+Task 1:
+Open ParametersProject.
+You need to do via API.
+Select all walls in a document.
+What criteria walls should pass.
+-They shouldn't be Curtain Walls,
+-their BaseConstraint should be set to level with the name Level 1
+-their Base Offset should be more than 1 feet
+-the decription of their type should equal to "TheOne"
+
+The answer will be the ROUNDED TO 2 DECIMALS sum of their TYPE ids + Volume.
+
+Additional exercise:
+-Create an extension method called Highlight for UIDocument class to easily select elements of the given document(you would need to google how to select elements in Revit via API)
+example : uiDocument.Highlight(elements);
+-Create an extension method for the document class to run a transaction
+example : document.Run(() => {//here we be the code to run}, "TransactionName");
+You need a transaction for selecting elements in the UI via API
+
+Answer : 2940.15
+
+Task 2:
+Given tasks includes the result of the previous one.
+Get all wall types in a document, remove the ones that you get from the previous result.
+Get their base constraint levels, and get only unique ones.
+e.g. If a list contains 3 elements of the same level, you shoould only get 1.
+[Level1, Level1, Level1] => [Level1]
+Change the type of the level to the one with the given name : "CustomLevelType"
+Increase the elevation of the level by 1.5 feet.
+The answer is the sum of elevation values before and after assignment.
+
+Answer : 29.25
+
+
+
+

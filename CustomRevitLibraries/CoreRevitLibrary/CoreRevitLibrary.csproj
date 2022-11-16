@@ -55,6 +55,7 @@
   <ItemGroup>
     <Compile Include="Extensions\DocumentExtensions.cs" />
     <Compile Include="Extensions\UIDocumentExtensions.cs" />
+    <Compile Include="Extensions\WallExtensions.cs" />
     <Compile Include="SelectionExercises\Task1.cs" />
     <Compile Include="SelectionExercises\Task1Alternative.cs" />
     <Compile Include="SelectionExercises\Task1Alternative2.cs" />
@@ -72,6 +73,8 @@
     <Compile Include="Extensions\CurrentDocumentOption.cs" />
     <Compile Include="Extensions\IPickElementsOption.cs" />
     <Compile Include="Extensions\LinkDocumentOption.cs" />
+    <Compile Include="ParametersExercises\ParameterExercise1.cs" />
+    <Compile Include="ParametersExercises\ParameterExercise2.cs" />
     <Compile Include="TestCommands\SelectionCommand.cs" />
     <Compile Include="TestCommands\TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>

@@ -27,6 +27,26 @@ namespace CoreRevitLibrary.Extensions
         {
             return pickElementsOption.PickElements(uiDocument, validateElement, statusPrompt);
         }
+
+        public static void Highlight(this UIDocument uiDocument, Element element)
+        {
+            uiDocument.Selection.SetElementIds(new List<ElementId>() { element.Id });
+        }
+        public static void Highlight(this UIDocument uiDocument, List<Element> elements)
+        {
+            uiDocument.Selection.SetElementIds(elements.Select(e => e.Id).ToList());
+        }
+        public static void Highlight(this UIDocument uiDocument, List<ElementId> elementIds)
+        {
+            uiDocument.Selection.SetElementIds(elementIds);
+        }
+
+        public static void Highlight(this UIDocument uiDocument, IEnumerable<Element> elements)
+        {
+            uiDocument.Selection.SetElementIds(elements.Select(e => e.Id).ToList());
+        }
+
+
     }
 
 }

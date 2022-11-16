@@ -161,5 +161,37 @@ namespace CoreRevitLibrary.Extensions
                 .WherePasses(multiClassFilter).ToList();
         }
 
+        public static void Run(
+            this Document document, Action doAction, string transactionName = "Default transaction name")
+        {
+            using (var transaction = new Transaction(document, transactionName))
+            {
+                transaction.Start();
+                doAction.Invoke();
+                transaction.Commit();
+            }
+        }
+
+        public static TReturn Run<TReturn>(
+            this Document document, Func<TReturn> doAction, string transactionName = "Default transaction name")
+        {
+            TReturn output;
+            using (var transaction = new Transaction(document, transactionName))
+            {
+                transaction.Start();
+                output = doAction.Invoke();
+                transaction.Commit();
+            }
+
+            return output;
+        }
+
+        public static TElement GetElement<TElement>(this Document document, ElementId elementId)
+        where TElement : Element
+        {
+            return document.GetElement(elementId) as TElement;
+        }
+
+
     }
 }

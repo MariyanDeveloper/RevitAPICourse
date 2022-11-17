@@ -19,7 +19,7 @@ namespace CoreRevitLibrary.ParametersExercises
             var document = uiDocument.Document;
             var firstLevel = document.GetElementByName<Level>("Level 1");
             var wallTypesToExclude = document.GetElementsByType<Wall>()
-                .Where(w => !WallExtensions.IsCurtain(w))
+                .Where(w => !w.IsCurtain())
                 .Where(w =>
                     w.get_Parameter(BuiltInParameter.WALL_BASE_CONSTRAINT).AsElementId() == firstLevel.Id &&
                     w.get_Parameter(BuiltInParameter.WALL_BASE_OFFSET).AsDouble() > 1 &&

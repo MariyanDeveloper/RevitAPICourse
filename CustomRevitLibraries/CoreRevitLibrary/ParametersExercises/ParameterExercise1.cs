@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using Autodesk.Revit.Attributes;
+﻿using Autodesk.Revit.Attributes;
 using Autodesk.Revit.DB;
 using Autodesk.Revit.UI;
 using CoreRevitLibrary.Extensions;
+using System;
+using System.Linq;
 
 namespace CoreRevitLibrary.ParametersExercises
 {
@@ -19,7 +19,7 @@ namespace CoreRevitLibrary.ParametersExercises
             var document = uiDocument.Document;
             Level levelToCheckBy = document.GetElementByName<Level>("Level 1");
             var walls = document.GetElementsByType<Wall>()
-                .Where(w => !WallExtensions.IsCurtain(w))
+                .Where(w => !w.IsCurtain())
                 .Where(w =>
                     w.get_Parameter(BuiltInParameter.WALL_BASE_CONSTRAINT).AsElementId() == levelToCheckBy.Id &&
                     w.get_Parameter(BuiltInParameter.WALL_BASE_OFFSET).AsDouble() > 1 &&

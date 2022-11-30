@@ -26,6 +26,7 @@ namespace CoreRevitLibrary.ParametersExercises
                     w.WallType.get_Parameter(BuiltInParameter.ALL_MODEL_DESCRIPTION).AsString() == "TheOne")
                 .Select(w => w.WallType)
                 .ToList();
+
             var wallTypeIds = document.GetElementsByType<WallType>()
                 .Where(wt => wallTypesToExclude.Select(w => w.Id).All(id => wt.Id != id))
                 .Select(w => w.Id)

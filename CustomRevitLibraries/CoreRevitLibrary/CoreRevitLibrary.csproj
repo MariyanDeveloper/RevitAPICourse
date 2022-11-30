@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>9</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
@@ -53,9 +55,24 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums\Extension.cs" />
     <Compile Include="Extensions\DocumentExtensions.cs" />
+    <Compile Include="Extensions\DoubleExtensions.cs" />
+    <Compile Include="Extensions\ElementExtensions.cs" />
+    <Compile Include="Extensions\MEPExtensions.cs" />
     <Compile Include="Extensions\UIDocumentExtensions.cs" />
     <Compile Include="Extensions\WallExtensions.cs" />
+    <Compile Include="GeometryUtils\AdvancedBoundingBoxXYZ.cs" />
+    <Compile Include="GeometryUtils\Alignment.cs" />
+    <Compile Include="GeometryUtils\BoundingBoxXYZExtensions.cs" />
+    <Compile Include="GeometryUtils\Cuboid.cs" />
+    <Compile Include="GeometryUtils\CurveExtensions.cs" />
+    <Compile Include="GeometryUtils\IGeometryShape.cs" />
+    <Compile Include="GeometryUtils\Measurement.cs" />
+    <Compile Include="GeometryUtils\Orientation.cs" />
+    <Compile Include="GeometryUtils\PlaneExtensions.cs" />
+    <Compile Include="GeometryUtils\TransformExtensions.cs" />
+    <Compile Include="GeometryUtils\XYZExtensions.cs" />
     <Compile Include="SelectionExercises\Task1.cs" />
     <Compile Include="SelectionExercises\Task1Alternative.cs" />
     <Compile Include="SelectionExercises\Task1Alternative2.cs" />
@@ -75,10 +92,19 @@
     <Compile Include="Extensions\LinkDocumentOption.cs" />
     <Compile Include="ParametersExercises\ParameterExercise1.cs" />
     <Compile Include="ParametersExercises\ParameterExercise2.cs" />
+    <Compile Include="GeometryUtils\IRotationResult.cs" />
+    <Compile Include="GeometryUtils\RotationResult.cs" />
+    <Compile Include="VectorExercises\ConnectExerciseCommand.cs" />
+    <Compile Include="VectorExercises\ConnectionResult.cs" />
+    <Compile Include="VectorExercises\CurveConnector.cs" />
+    <Compile Include="VectorExercises\IConnectionResult.cs" />
+    <Compile Include="VectorExercises\ICurveConnector.cs" />
+    <Compile Include="VectorExercises\ITriangleCalculation.cs" />
     <Compile Include="TestCommands\SelectionCommand.cs" />
     <Compile Include="TestCommands\TestWindow.xaml.cs">
       <DependentUpon>TestWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VectorExercises\TriangleCalculation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="TestCommands\TestWindow.xaml">

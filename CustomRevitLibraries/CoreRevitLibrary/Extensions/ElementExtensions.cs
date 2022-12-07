@@ -1,4 +1,6 @@
 ﻿using Autodesk.Revit.DB;
+using CoreRevitLibrary.Enums;
+using CoreRevitLibrary.GeometryUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -92,6 +94,43 @@ namespace CoreRevitLibrary.Extensions
             var document = elements.First().Document;
             var ids = elements.Select(e => e.Id).ToList();
             ElementTransformUtils.MoveElements(document, ids, translation);
+        }
+
+        /// <summary>
+        /// This method is used to get any geometry objects from element
+        /// </summary>
+        /// <typeparam name="T">Geometry object</typeparam>
+        /// <param name="element"></param>
+        /// <param name="geometryOptions">geometry options</param>
+        /// <param name="geometryRepresentation">Symbol or instance geometry</param>
+        /// <returns></returns>
+        public static IEnumerable<T> GetGeometryObjects<T>(
+            this Element element,
+            Options geometryOptions = null,
+            GeometryRepresentation geometryRepresentation = GeometryRepresentation.Instance)
+            where T : GeometryObject
+        {
+            if (element == null) throw new ArgumentNullException(nameof(element));
+            geometryOptions ??= new Options();
+            var geometryElements = new List<GeometryElement>()
+            {
+                element.get_Geometry(geometryOptions)
+            };
+            if (element is FamilyInstance familyInstance)
+            {
+                if (familyInstance.GetSubComponentIds().Any())
+                {
+                    geometryElements.AddRange(familyInstance.GetSubComponentIds()
+                        .Select(subComponentId => element.Document.GetElement(subComponentId))
+                        .Select(subComponent => subComponent.get_Geometry(geometryOptions)));
+                }
+            }
+            if (geometryElements.Any(x => x == null))
+                return Enumerable.Empty<T>();
+
+            return geometryElements.SelectMany(x => x.GetRootElements<T>(
+                geometryRepresentation));
+
         }
 
 

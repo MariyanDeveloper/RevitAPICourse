@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace CoreRevitLibrary.GeometryUtils
 {
-
     public class AdvancedBoundingBoxXYZ : BoundingBoxXYZ
     {
         public double Length
@@ -24,9 +23,18 @@ namespace CoreRevitLibrary.GeometryUtils
             get => GetDimensions(Measurement.Height);
             set => SetDimensions(value, Measurement.Height, Alignment.Bottom);
         }
+
+        public XYZ Origin
+        {
+            get => Transform.Origin;
+            set => Move(Origin.ToVector(value));
+        }
         public CurveLoop BaseCurveLoop => GetBaseCurveLoop();
         public AdvancedBoundingBoxXYZ(double length = 1, double width = 1, double height = 1)
         {
+            if (length <= 0) throw new ArgumentOutOfRangeException(nameof(length));
+            if (width <= 0) throw new ArgumentOutOfRangeException(nameof(width));
+            if (height <= 0) throw new ArgumentOutOfRangeException(nameof(height));
             Length = length;
             Width = width;
             Height = height;
@@ -41,6 +49,48 @@ namespace CoreRevitLibrary.GeometryUtils
         {
             if (geometryShape == null) throw new ArgumentNullException(nameof(geometryShape));
             return geometryShape.ToSolid(this);
+        }
+        public static AdvancedBoundingBoxXYZ Create(BoundingBoxXYZ boundingBox)
+        {
+            if (boundingBox == null) throw new ArgumentNullException(nameof(boundingBox));
+            AdvancedBoundingBoxXYZ box = new AdvancedBoundingBoxXYZ()
+            {
+                Min = boundingBox.Min,
+                Max = boundingBox.Max,
+                Transform = boundingBox.Transform
+            };
+            return box;
+        }
+
+        public void Move(XYZ translation)
+        {
+            if (translation == null) throw new ArgumentNullException(nameof(translation));
+            var transform = Transform;
+            var origin = transform.Origin.MoveAlongVector(translation);
+            transform.Origin = origin;
+            Transform = transform;
+
+        }
+        public PlanarFace GetFace(FaceOrientation faceOrientation)
+        {
+            var faceToNormals = new Dictionary<FaceOrientation, XYZ>()
+            {
+                {FaceOrientation.Up, this.Transform.BasisZ},
+                {FaceOrientation.Down, -this.Transform.BasisZ},
+                {FaceOrientation.Left, -this.Transform.BasisX},
+                {FaceOrientation.Right, this.Transform.BasisX},
+                {FaceOrientation.Front, this.Transform.BasisY},
+                {FaceOrientation.Back, -this.Transform.BasisY}
+            };
+            return this.ToSolid(new Cuboid())
+                .Faces.OfType<PlanarFace>()
+                .First(x => x.FaceNormal.IsAlmostEqualTo(faceToNormals[faceOrientation]));
+        }
+
+        public void Visualize(Document document)
+        {
+            ToSolid(new Cuboid()).Visualize(document);
+            Transform.Visualize(document);
         }
 
 
@@ -80,15 +130,6 @@ namespace CoreRevitLibrary.GeometryUtils
             return curveLoop;
         }
 
-        public static AdvancedBoundingBoxXYZ Create(BoundingBoxXYZ boundingBox)
-        {
-            AdvancedBoundingBoxXYZ box = new AdvancedBoundingBoxXYZ()
-            {
-                Min = boundingBox.Min,
-                Max = boundingBox.Max,
-                Transform = boundingBox.Transform
-            };
-            return box;
-        }
+
     }
 }

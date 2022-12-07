@@ -1,6 +1,6 @@
 ﻿using Autodesk.Revit.DB;
+using CoreRevitLibrary.Enums;
 using CoreRevitLibrary.Extensions;
-using CoreRevitLibrary.TestCommands;
 using System;
 using System.Collections.Generic;
 
@@ -209,83 +209,7 @@ namespace CoreRevitLibrary.GeometryUtils
             return result;
         }
 
-        //public static double GetRotationAroundZTo(this XYZ fromVector, XYZ toVector)
-        //{
-        //    var projectedOnZVector = fromVector.ProjectOntoPlane(
-        //        Plane.CreateByNormalAndOrigin(XYZ.BasisZ, XYZ.Zero));
-        //    var perpendicularVector = projectedOnZVector.CrossProduct(XYZ.BasisZ);
-        //    var dotProduct = perpendicularVector.DotProduct(toVector);
-        //    var multiplier = dotProduct / (Math.Abs(dotProduct));
-        //    return projectedOnZVector.AngleTo(toVector) * multiplier;
-        //}
 
-        //public static double GetRotationAroundYTo(this XYZ fromVector, XYZ toVector)
-        //{
-        //    var projectedOnYVector = fromVector.ProjectOntoPlane(
-        //        Plane.CreateByNormalAndOrigin(XYZ.BasisY, XYZ.Zero));
-        //    var perpendicularVector = projectedOnYVector.CrossProduct(XYZ.BasisY);
-        //    var dotProduct = perpendicularVector.DotProduct(XYZ.BasisX);
-        //    var multiplier = dotProduct / (Math.Abs(dotProduct)); ;
-        //    return projectedOnYVector.AngleTo(XYZ.BasisX) * multiplier;
-        //}
-        //public static double GetRotationAroundXTo(this XYZ fromVector, XYZ toVector)
-        //{
-        //    var projectedOnYVector = fromVector.ProjectOntoPlane(
-        //        Plane.CreateByNormalAndOrigin(XYZ.BasisY, XYZ.Zero));
-        //    var perpendicularVector = projectedOnYVector.CrossProduct(XYZ.BasisY);
-        //    var dotProduct = perpendicularVector.DotProduct(XYZ.BasisX);
-        //    var multiplier = dotProduct / (Math.Abs(dotProduct)); ;
-        //    return projectedOnYVector.AngleTo(XYZ.BasisX) * multiplier;
-        //}
-
-        //public static double FindRotationAroundX(this XYZ fromVector, XYZ toVector)
-        //{
-        //    var rotationAxis = XYZ.BasisX;
-        //    var plane = Plane.CreateByNormalAndOrigin(rotationAxis, XYZ.Zero);
-        //    var projectedOnXFromVector = fromVector.ProjectOntoPlane(
-        //        plane);
-        //    var projectedOnXToVector = toVector.ProjectOntoPlane(
-        //        plane);
-        //    var angle = FindAngle(
-        //        projectedOnXFromVector,
-        //        projectedOnXToVector,
-        //        rotationAxis,
-        //        XYZ.BasisY);
-        //    return angle;
-        //}
-
-        //public static double FindRotationAroundY(this XYZ fromVector, XYZ toVector)
-        //{
-        //    var rotationAxis = XYZ.BasisY;
-        //    var plane = Plane.CreateByNormalAndOrigin(rotationAxis, XYZ.Zero);
-        //    var projectedOnXFromVector = fromVector.ProjectOntoPlane(
-        //        plane);
-        //    var projectedOnXToVector = toVector.ProjectOntoPlane(
-        //        plane);
-        //    var angle = FindAngle(
-        //        projectedOnXFromVector,
-        //        projectedOnXToVector,
-        //        rotationAxis,
-        //        XYZ.BasisX);
-        //    return angle;
-        //}
-
-        //private static double FindAngle(
-        //    XYZ projectedOnXFromVector,
-        //    XYZ projectedOnXToVector,
-        //    XYZ rotationAxis,
-        //    XYZ fallbackVector)
-        //{
-        //    if (projectedOnXFromVector.IsZeroLength())
-        //        projectedOnXToVector = fallbackVector;
-        //    if (projectedOnXToVector.IsZeroLength())
-        //        projectedOnXToVector = fallbackVector;
-        //    var perpendicularVector = projectedOnXFromVector.CrossProduct(rotationAxis);
-        //    var dotProduct = perpendicularVector.DotProduct(projectedOnXToVector);
-        //    var multiplier = dotProduct / (Math.Abs(dotProduct));
-        //    var angle = projectedOnXFromVector.AngleTo(projectedOnXToVector) * multiplier;
-        //    return angle;
-        //}
         public static IRotationResult GetRotationResultTo(
             this XYZ fromVector, XYZ toVector)
         {
@@ -305,7 +229,24 @@ namespace CoreRevitLibrary.GeometryUtils
             var outputTransform = transform.Multiply(Transform.CreateRotation(XYZ.BasisX, angle));
             if (orientation == Orientation.Facing) return outputTransform;
             return outputTransform.Multiply(Transform.CreateRotation(XYZ.BasisZ, Math.PI / 2));
+        }
 
+        public static VectorRelation GetRelationTo(
+            this XYZ fromVector, XYZ toVector)
+        {
+            if (fromVector.DotProduct(toVector).IsAlmostEqualTo(1))
+            {
+                return VectorRelation.Equal;
+            }
+            if (fromVector.DotProduct(toVector).IsAlmostEqualTo(-1))
+            {
+                return VectorRelation.Reversed;
+            }
+            if (fromVector.DotProduct(toVector).IsAlmostEqualTo(0))
+            {
+                return VectorRelation.Perpendicular;
+            }
+            return VectorRelation.Undefined;
         }
 
     }

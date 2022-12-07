@@ -69,8 +69,9 @@ namespace CoreRevitLibrary.GeometryUtils
             var clonedCurve = curve.Clone();
             clonedCurve.Extend(value, extension);
             return clonedCurve;
-
         }
+
+        public static XYZ GetCenter(this Curve curve) => curve.Evaluate(0.5, true);
 
 
 
